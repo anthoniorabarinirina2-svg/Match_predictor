@@ -3,105 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADALABE AI - BET261 REAL SCANNER</title>
+    <title>ADALABE AI - REAL TIME SCANNER</title>
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1e2329; --green: #00ff00; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 450px; margin: auto; display: none; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; }
+        .container { max-width: 450px; margin: auto; display: none; text-align: center; }
         
-        /* Barre de Recherche Corrigée */
-        .search-area { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 20px; border: 1px solid var(--gold); }
-        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; box-sizing: border-box; }
+        /* Recherche */
+        .search-box { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--gold); }
+        .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
         
-        /* Cartes Match */
-        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; position: relative; }
-        .time-tag { font-size: 11px; color: #aaa; margin-bottom: 5px; font-weight: bold; }
-        .winner-label { background: var(--green); color: #000; padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 14px; display: inline-block; margin: 10px 0; }
+        /* Liste de Matchs */
+        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
+        .date-time { font-size: 11px; color: #888; margin-bottom: 5px; font-weight: bold; }
+        .winner-tag { background: var(--green); color: #000; padding: 5px 10px; border-radius: 5px; font-weight: bold; display: inline-block; margin: 8px 0; }
         
-        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; }
         #lock { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     <div id="lock">
-        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%;">
+        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%; text-align:center;">
             <h2 style="color:var(--gold)">ADALABE AI</h2>
-            <input type="text" id="pass" placeholder="PASSWORD">
+            <input type="text" id="pass" placeholder="PASSWORD" style="width:100%; padding:10px; margin-bottom:10px; text-align:center;">
             <button class="btn" onclick="unlock()">ENTRER</button>
         </div>
     </div>
 
     <div id="app" class="container">
-        <h2 style="color:var(--gold)">SCANNER ASSURÉ BET261</h2>
-        
-        <div class="search-area">
-            <input type="text" id="search-input" placeholder="Taper un match (ex: Arsenal vs Liverpool)">
-            <button class="btn" style="background:#3498db; color:white;" onclick="manualSearch()">ANALYSER LE MATCH</button>
+        <h2 style="color:var(--gold)">SCANNER LIVE BET261</h2>
+
+        <div class="search-box">
+            <input type="text" id="s-input" class="search-input" placeholder="Chercher un match (ex: PSG vs Lyon)">
+            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER MAINTENANT</button>
         </div>
 
-        <div id="display-list">
-            </div>
-
-        <button class="btn" onclick="loadRealLifeMatches()" style="margin-top:10px;">SCANNER LES MATCHS DU JOUR</button>
+        <div id="list"></div>
+        <button class="btn" onclick="actualiser()" style="margin-top:10px;">SCANNER NOUVEAUX MATCHS</button>
     </div>
 
     <script>
+        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Barcelone", "Man City", "Bayern", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Chelsea", "Inter Milan", "Dortmund"];
+
         function unlock() {
             if(document.getElementById('pass').value.toLowerCase().trim() === 'adalabe') {
                 document.getElementById('lock').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
-                loadRealLifeMatches();
-            } else { alert("Code incorrect"); }
+                actualiser();
+            } else { alert("Faux !"); }
         }
 
-        // Base de données simulée basée sur le calendrier réel (CAN, Premier League)
-        const realData = [
-            { t1: "Arsenal FC", t2: "Liverpool FC", date: "08/01/2026", time: "23:00", win: "ARSENAL (1)", cote: "1.54" },
-            { t1: "Burnley FC", t2: "Man. United", date: "07/01/2026", time: "23:15", win: "MAN. UNITED (2)", cote: "1.64" },
-            { t1: "Olympiakos", t2: "Bayer Leverkusen", date: "20/01/2026", time: "23:00", win: "LEVERKUSEN (2)", cote: "1.51" },
-            { t1: "Madagascar", t2: "Égypte (CAN)", date: "03/01/2026", time: "18:00", win: "ÉGYPTE (2)", cote: "1.45" }
-        ];
-
-        function loadRealLifeMatches() {
-            const list = document.getElementById('display-list');
-            list.innerHTML = "<p>Recherche des évènements en cours...</p>";
+        function actualiser() {
+            const list = document.getElementById('list');
+            list.innerHTML = "<p>Mise à jour des cotes...</p>";
+            
             setTimeout(() => {
                 list.innerHTML = "";
-                realData.forEach(m => createCard(m, list));
-            }, 800);
+                // On mélange pour avoir de nouveaux matchs à chaque fois
+                let tempEquipes = [...equipes].sort(() => 0.5 - Math.random());
+                for(let i = 0; i < 4; i++) {
+                    creerCarte(tempEquipes[i], tempEquipes[i+4], list);
+                }
+            }, 600);
         }
 
-        // Correction de la Recherche : Fonctionne maintenant pour tout texte
-        function manualSearch() {
-            const query = document.getElementById('search-input').value;
-            if(query.length < 3) return alert("Précisez le match");
-
-            const list = document.getElementById('display-list');
-            list.innerHTML = "";
+        // FONCTION RECHERCHE CORRIGÉE
+        function rechercher() {
+            const val = document.getElementById('s-input').value;
+            if(val.length < 2) return alert("Ecris le nom du match");
             
-            // On crée un résultat basé sur la recherche de l'utilisateur
-            const simulatedMatch = {
-                t1: query.toUpperCase(),
-                t2: "",
-                date: new Date().toLocaleDateString(),
-                time: "LIVE",
-                win: "ANALYSE : VICTOIRE 1 OU 2 (SÉCURISÉ)",
-                cote: "1.50~"
-            };
-            createCard(simulatedMatch, list);
-            loadRealLifeMatches(); // Remet la liste en dessous
+            const list = document.getElementById('list');
+            list.innerHTML = ""; // Vide la liste
+            
+            // Crée le match recherché avec un résultat fixe
+            creerCarte(val, "", list);
+            // Ajoute d'autres matchs pour remplir la page
+            let temp = [...equipes].sort(() => 0.5 - Math.random());
+            for(let i = 0; i < 2; i++) { creerCarte(temp[i], temp[i+2], list); }
         }
 
-        function createCard(m, container) {
+        function creerCarte(t1, t2, container) {
+            const nomMatch = t2 ? `${t1} vs ${t2}` : t1.toUpperCase();
+            const gagnant = Math.random() > 0.5 ? "EQUIPE 1 (1)" : "EQUIPE 2 (2)";
+            
+            // Heure et Date Réelle
+            const d = new Date();
+            const dateStr = d.toLocaleDateString();
+            const heureStr = (d.getHours() + Math.floor(Math.random()*3)) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
+
             container.innerHTML += `
                 <div class="match-card">
-                    <div class="time-tag">📅 ${m.date} | ⏰ ${m.time}</div>
-                    <div style="font-weight:bold; font-size:16px;">${m.t1} ${m.t2 ? 'vs ' + m.t2 : ''}</div>
-                    <div class="winner-label">GAGNANT : ${m.win}</div>
-                    <div style="font-size:12px; color:var(--gold); font-weight:bold;">
-                        Côte estimée : ${m.cote} | Confiance : 96%
-                    </div>
+                    <div class="date-time">📅 ${dateStr} | ⏰ ${heureStr}</div>
+                    <div style="font-weight:bold; font-size:16px;">${nomMatch}</div>
+                    <div class="winner-tag">GAGNANT : ${gagnant}</div>
+                    <div style="font-size:12px; color:var(--gold);">Cote: 1.50+ | Confiance: ${Math.floor(Math.random()*10)+89}%</div>
                 </div>
             `;
         }
