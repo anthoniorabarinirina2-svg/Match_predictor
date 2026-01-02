@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bet261 Pro Predictor</title>
+    <style>
+        body { background: #0b0e11; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 10px; }
+        .container { background: #1e2329; border-radius: 20px; border: 1px solid #f0b90b; max-width: 450px; margin: auto; padding: 20px; }
+        .match-card { background: #2b3139; border-radius: 15px; padding: 15px; margin-top: 15px; text-align: left; position: relative; }
+        .team-name { font-weight: bold; font-size: 17px; margin-bottom: 5px; }
+        .prediction { color: #f0b90b; font-weight: bold; font-size: 15px; }
+        
+        /* Barre de chance */
+        .chance-container { background: #444; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+        .chance-bar { height: 100%; background: linear-gradient(90deg, #f02d7d, #00ff00); transition: width 1s ease-in-out; }
+        .chance-text { font-size: 12px; color: #00ff00; font-weight: bold; margin-top: 5px; }
+
+        button { width: 100%; padding: 18px; background: #f0b90b; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; color: #000; margin-top: 20px; box-shadow: 0 4px 10px rgba(240, 185, 11, 0.3); }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 style="color:#f0b90b; margin:0;">BET261 PREDICTOR</h2>
+        <div style="font-size: 11px; color:#888; margin-bottom: 20px;">ANALYSE STATISTIQUE ALGORITHMIQUE</div>
+
+        <div id="predictions-list">
+            <p style="color:#666;">Prêt pour l'analyse des matchs d'aujourd'hui...</p>
+        </div>
+
+        <button onclick="analyserMatchs()">GÉNÉRER L'ANALYSE DE CHANCE</button>
+        
+        <p style="font-size: 10px; color: #555; margin-top: 15px;">Les probabilités sont basées sur les derniers résultats H2H.</p>
+    </div>
+
+    <script>
+        const database = [
+            { t1: "Real Madrid", t2: "Alavés", p: "Victoire 1", chance: 98 },
+            { t1: "Man. City", t2: "Brighton", p: "Plus de 2.5 buts", chance: 94 },
+            { t1: "Liverpool", t2: "Crystal Palace", p: "Victoire 1", chance: 91 },
+            { t1: "Bayern Munich", t2: "Augsburg", p: "Victoire 1", chance: 97 },
+            { t1: "Inter Milan", t2: "Torino", p: "Victoire 1", chance: 89 },
+            { t1: "PSG", t2: "Auxerre", p: "Victoire 1", chance: 96 },
+            { t1: "Arsenal", t2: "Luton", p: "Plus de 1.5 buts", chance: 99 }
+        ];
+
+        function analyserMatchs() {
+            const list = document.getElementById('predictions-list');
+            list.innerHTML = ""; 
+
+            // Mélanger et prendre 3 matchs
+            const selected = database.sort(() => 0.5 - Math.random()).slice(0, 3);
+
+            selected.forEach(match => {
+                list.innerHTML += `
+                    <div class="match-card">
+                        <div class="team-name">${match.t1} vs ${match.t2}</div>
+                        <div class="prediction">PRONOSTIC : ${match.p}</div>
+                        <div class="chance-text">CHANCE DE GAGNER : ${match.chance}%</div>
+                        <div class="chance-container">
+                            <div class="chance-bar" style="width: ${match.chance}%"></div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
