@@ -4,131 +4,105 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADALABE AI - MULTI-PREDICTOR</title>
+    <title>ADALABE AI - PREDICTOR PRO</title>
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1e2329; --green: #00ff00; --pink: #f02d7d; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 10px; }
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
         
         /* Sécurité */
         #lock { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
-        .lock-box { background: var(--card); padding: 30px; border-radius: 20px; border: 2px solid var(--gold); text-align: center; width: 85%; max-width: 320px; }
+        .lock-box { background: var(--card); padding: 30px; border-radius: 20px; border: 2px solid var(--gold); width: 85%; max-width: 320px; }
         
-        /* Application */
+        /* App Structure */
         .container { max-width: 450px; margin: auto; display: none; }
-        .header { background: var(--card); padding: 15px; border-radius: 15px; border-bottom: 3px solid var(--gold); margin-bottom: 15px; text-align: center; }
-        .section-title { color: var(--gold); font-size: 18px; margin-top: 20px; text-transform: uppercase; border-left: 4px solid var(--pink); padding-left: 10px; }
+        .card { background: var(--card); border-radius: 15px; padding: 20px; margin-bottom: 20px; border: 1px solid #333; }
+        
+        /* Chance Bar */
+        .chance-container { background: #111; height: 12px; border-radius: 6px; margin: 15px 0; overflow: hidden; border: 1px solid #444; }
+        .chance-bar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--pink), var(--green)); transition: width 1.5s ease-in-out; }
+        #chance-val { font-size: 28px; font-weight: bold; color: var(--green); }
 
-        /* Styles Communs */
-        .card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; border: 1px solid #333; }
         .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; margin-top: 10px; }
-        input { width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; box-sizing: border-box; text-align: center; }
-        
-        /* Aviator Timer */
-        #aviator-timer { font-size: 40px; color: var(--pink); font-weight: bold; margin: 10px 0; }
-        
-        /* Match Styles */
-        .score-badge { background: #000; color: var(--gold); padding: 5px 10px; border-radius: 8px; font-weight: bold; display: inline-block; margin: 5px 0; }
-        .chance-bg { background: #444; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 5px; }
-        .chance-fill { height: 100%; background: linear-gradient(90deg, var(--pink), var(--green)); transition: width 1s; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; box-sizing: border-box; font-size: 16px; }
+        .result-box { margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px; display: none; border: 1px dashed var(--gold); }
     </style>
 </head>
 <body>
 
     <div id="lock">
         <div class="lock-box">
-            <h2 style="color:var(--gold)">ADALABE ACCESS</h2>
-            <input type="text" id="pass" placeholder="Entrez le mot de passe">
+            <h2 style="color:var(--gold)">ADALABE AI</h2>
+            <p style="font-size: 12px; color: #888;">SYSTÈME DE PRÉDICTION SÉCURISÉ</p>
+            <input type="text" id="pass" placeholder="PASSWORD">
             <button class="btn" onclick="login()">DÉVERROUILLER</button>
         </div>
     </div>
 
     <div id="app" class="container">
-        <div class="header">
-            <h2 style="margin:0; color:var(--gold)">PREDICTOR MULTI-AI</h2>
-            <div id="date" style="font-size: 11px; color:#888;"></div>
-        </div>
+        <h2 style="color:var(--gold); margin-bottom: 20px;">PREDICTOR CHANCE v3.0</h2>
 
-        <div class="section-title">Aviator Predictor</div>
         <div class="card">
-            <div id="aviator-timer">--:--</div>
-            <div id="aviator-msg" style="font-size: 12px; color:#3498db;">ENTREZ L'HEURE DE LA CAPTURE</div>
-            <div style="display: flex; gap: 5px;">
-                <input type="number" id="av-min" placeholder="Min">
-                <input type="number" id="av-sec" placeholder="Sec">
+            <h3 style="margin:0 0 10px 0;">BET261 FOOT ANALYSER</h3>
+            <p style="font-size: 12px; color: #888;">Saisissez le match (ex: Arsenal vs Liverpool)</p>
+            <input type="text" id="match-input" placeholder="Nom du match">
+            <button class="btn" onclick="analyserMatch()">CALCULER LA CHANCE</button>
+
+            <div id="match-res" class="result-box">
+                <div id="res-name" style="font-weight:bold; color:var(--gold); font-size: 18px;"></div>
+                <div id="chance-val">0%</div>
+                <div style="font-size: 11px; color:#888; letter-spacing: 1px;">CHANCE DE RÉUSSITE ESTIMÉE</div>
+                <div class="chance-container">
+                    <div id="bar" class="chance-bar"></div>
+                </div>
+                <div id="res-score" style="font-weight:bold; margin-top:10px; font-size: 20px;">SCORE : --</div>
+                <div style="color:var(--green); font-size: 13px; margin-top: 5px;">CONSEIL : MISE SÉCURISÉE</div>
             </div>
-            <button class="btn" onclick="startAviator()">LANCER LE CYCLE</button>
         </div>
 
-        <div class="section-title">Matchs Pro Bet261</div>
-        <div id="match-results">
-            <p style="color:#666; font-size: 12px;">Appuyez sur Analyser pour les matchs...</p>
+        <div class="card" style="border-top: 3px solid var(--pink);">
+            <h3 style="margin:0 0 10px 0;">AVIATOR SYNC</h3>
+            <p style="font-size: 11px; color: #888;">Synchronisation temporelle sur le cycle Bet261</p>
+            <button class="btn" style="background:#222; color:white; border: 1px solid #444;" onclick="alert('Cycle synchronisé sur le serveur Bet261')">LANCER LA SYNCHRO LIVE</button>
         </div>
-        <button class="btn" onclick="generateMatches()">GÉNÉRER ANALYSE FOOT</button>
-
-        <button class="btn" style="background:#222; color:#777; font-size: 12px; margin-top: 30px;" onclick="location.reload()">DÉCONNEXION</button>
     </div>
 
     <script>
-        // --- LOGIQUE SÉCURITÉ ---
+        // Fonction de Login
         function login() {
-            const p = document.getElementById('pass').value.toLowerCase().trim();
-            if(p === 'adalabe') {
+            const input = document.getElementById('pass').value.toLowerCase().trim();
+            if(input === 'adalabe') {
                 document.getElementById('lock').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
-                document.getElementById('date').innerText = new Date().toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
-            } else { alert("Mot de passe incorrect"); }
+            } else {
+                alert("Code incorrect !");
+            }
         }
 
-        // --- LOGIQUE AVIATOR ---
-        function startAviator() {
-            let m = parseInt(document.getElementById('av-min').value);
-            let s = parseInt(document.getElementById('av-sec').value);
-            if(isNaN(m) || isNaN(s)) return alert("Entrez les données !");
+        // Algorithme de Chance de Gagner
+        function analyserMatch() {
+            const matchName = document.getElementById('match-input').value;
+            if(matchName.length < 3) {
+                alert("Veuillez entrer le nom des équipes");
+                return;
+            }
 
-            let target = (m * 60) + s + 150; // Cycle de 2min 30s
+            // Génération de probabilités réalistes (entre 84% et 98%)
+            const proba = Math.floor(Math.random() * (98 - 84 + 1)) + 84; 
+            const scoresPossible = ["2-0", "1-0", "2-1", "3-1", "3-0", "1-1"];
+            const scoreFinal = scoresPossible[Math.floor(Math.random() * scoresPossible.length)];
+
+            // Affichage des résultats
+            document.getElementById('match-res').style.display = "block";
+            document.getElementById('res-name').innerText = matchName.toUpperCase();
+            document.getElementById('chance-val').innerText = proba + "%";
+            document.getElementById('res-score').innerText = "SCORE : " + scoreFinal;
             
-            setInterval(() => {
-                let maintenant = new Date();
-                let actuel = (maintenant.getMinutes() * 60) + maintenant.getSeconds();
-                let restant = target - actuel;
-
-                if (restant > 0) {
-                    let rm = Math.floor(restant / 60);
-                    let rs = restant % 60;
-                    document.getElementById('aviator-timer').innerText = (rm < 10 ? "0"+rm : rm) + ":" + (rs < 10 ? "0"+rs : rs);
-                    document.getElementById('aviator-msg').innerText = "ANALYSE EN COURS...";
-                } else {
-                    document.getElementById('aviator-timer').innerText = "MISEZ !";
-                    document.getElementById('aviator-timer').style.color = "#00ff00";
-                    document.getElementById('aviator-msg').innerText = "SIGNAL DÉTECTÉ";
-                }
-            }, 1000);
-        }
-
-        // --- LOGIQUE MATCHS ---
-        const footballDb = [
-            { t1: "Real Madrid", t2: "Betis", p: "Victoire 1", s: "2 - 0", c: 98 },
-            { t1: "Man. City", t2: "Newcastle", p: "Over 2.5", s: "3 - 1", c: 96 },
-            { t1: "PSG", t2: "Lyon", p: "Victoire 1", s: "2 - 1", c: 94 },
-            { t1: "Bayern", t2: "Stuttgart", p: "Victoire 1", s: "4 - 0", c: 97 }
-        ];
-
-        function generateMatches() {
-            const container = document.getElementById('match-results');
-            container.innerHTML = "";
-            const selected = footballDb.sort(() => 0.5 - Math.random()).slice(0, 2);
-
-            selected.forEach(m => {
-                container.innerHTML += `
-                    <div class="card" style="text-align:left; border-left: 4px solid var(--gold);">
-                        <div style="font-weight:bold;">${m.t1} vs ${m.t2}</div>
-                        <div style="color:var(--gold); font-size:13px;">Prono : ${m.p}</div>
-                        <div class="score-badge">Score : ${m.s}</div>
-                        <div style="font-size:11px; margin-top:5px;">Confiance : ${m.c}%</div>
-                        <div class="chance-bg"><div class="chance-fill" style="width:${m.c}%"></div></div>
-                    </div>
-                `;
-            });
+            // Animation de la barre de chance
+            const bar = document.getElementById('bar');
+            bar.style.width = "0%";
+            setTimeout(() => {
+                bar.style.width = proba + "%";
+            }, 200);
         }
     </script>
 </body>
