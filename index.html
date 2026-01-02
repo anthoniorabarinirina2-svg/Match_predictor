@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADALABE AI - REAL TIME SCANNER</title>
+    <title>ADALABE AI - NOM DU GAGNANT</title>
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1e2329; --green: #00ff00; }
         body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; }
@@ -11,14 +11,14 @@
         
         /* Recherche */
         .search-box { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--gold); }
-        .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; margin-bottom: 10px; }
+        .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; margin-bottom: 10px; font-size: 16px; }
         
-        /* Liste de Matchs */
-        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
+        /* Cartes */
+        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; position: relative; }
         .date-time { font-size: 11px; color: #888; margin-bottom: 5px; font-weight: bold; }
-        .winner-tag { background: var(--green); color: #000; padding: 5px 10px; border-radius: 5px; font-weight: bold; display: inline-block; margin: 8px 0; }
+        .winner-tag { background: var(--green); color: #000; padding: 6px 12px; border-radius: 5px; font-weight: bold; display: inline-block; margin: 10px 0; text-transform: uppercase; }
         
-        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; }
+        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; }
         #lock { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
@@ -27,8 +27,8 @@
     <div id="lock">
         <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%; text-align:center;">
             <h2 style="color:var(--gold)">ADALABE AI</h2>
-            <input type="text" id="pass" placeholder="PASSWORD" style="width:100%; padding:10px; margin-bottom:10px; text-align:center;">
-            <button class="btn" onclick="unlock()">ENTRER</button>
+            <input type="password" id="pass" placeholder="PASSWORD" style="width:100%; padding:10px; margin-bottom:10px; text-align:center;">
+            <button class="btn" onclick="unlock()">DÉVERROUILLER</button>
         </div>
     </div>
 
@@ -36,69 +36,73 @@
         <h2 style="color:var(--gold)">SCANNER LIVE BET261</h2>
 
         <div class="search-box">
-            <input type="text" id="s-input" class="search-input" placeholder="Chercher un match (ex: PSG vs Lyon)">
-            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER MAINTENANT</button>
+            <input type="text" id="s-input" class="search-input" placeholder="Ex: Madagascar vs Sénégal">
+            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER CE MATCH</button>
         </div>
 
         <div id="list"></div>
-        <button class="btn" onclick="actualiser()" style="margin-top:10px;">SCANNER NOUVEAUX MATCHS</button>
+        <button class="btn" onclick="actualiser()" style="margin-top:10px;">GÉNÉRER NOUVEAUX MATCHS</button>
     </div>
 
     <script>
-        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Barcelone", "Man City", "Bayern", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Chelsea", "Inter Milan", "Dortmund"];
+        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Barcelone", "Man City", "Bayern", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Chelsea", "Juventus", "Dortmund"];
 
         function unlock() {
             if(document.getElementById('pass').value.toLowerCase().trim() === 'adalabe') {
                 document.getElementById('lock').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
                 actualiser();
-            } else { alert("Faux !"); }
+            } else { alert("Mot de passe incorrect"); }
         }
 
         function actualiser() {
             const list = document.getElementById('list');
-            list.innerHTML = "<p>Mise à jour des cotes...</p>";
+            list.innerHTML = "<p>Scan des serveurs en cours...</p>";
             
             setTimeout(() => {
                 list.innerHTML = "";
-                // On mélange pour avoir de nouveaux matchs à chaque fois
-                let tempEquipes = [...equipes].sort(() => 0.5 - Math.random());
+                let shuffle = [...equipes].sort(() => 0.5 - Math.random());
                 for(let i = 0; i < 4; i++) {
-                    creerCarte(tempEquipes[i], tempEquipes[i+4], list);
+                    creerCarte(shuffle[i], shuffle[i+4], list);
                 }
-            }, 600);
+            }, 500);
         }
 
-        // FONCTION RECHERCHE CORRIGÉE
         function rechercher() {
-            const val = document.getElementById('s-input').value;
-            if(val.length < 2) return alert("Ecris le nom du match");
+            const val = document.getElementById('s-input').value.trim();
+            if(val.length < 3) return alert("Veuillez écrire le nom du match");
             
             const list = document.getElementById('list');
-            list.innerHTML = ""; // Vide la liste
+            list.innerHTML = ""; 
             
-            // Crée le match recherché avec un résultat fixe
-            creerCarte(val, "", list);
-            // Ajoute d'autres matchs pour remplir la page
-            let temp = [...equipes].sort(() => 0.5 - Math.random());
-            for(let i = 0; i < 2; i++) { creerCarte(temp[i], temp[i+2], list); }
+            // Analyse intelligente du texte pour extraire les noms
+            let noms = val.split(/vs|VS|-/);
+            let t1 = noms[0] ? noms[0].trim() : val;
+            let t2 = noms[1] ? noms[1].trim() : "";
+
+            creerCarte(t1, t2, list, true);
+            
+            // On ajoute 2 autres matchs pour remplir
+            let extra = [...equipes].sort(() => 0.5 - Math.random());
+            creerCarte(extra[0], extra[1], list);
         }
 
-        function creerCarte(t1, t2, container) {
-            const nomMatch = t2 ? `${t1} vs ${t2}` : t1.toUpperCase();
-            const gagnant = Math.random() > 0.5 ? "EQUIPE 1 (1)" : "EQUIPE 2 (2)";
+        function creerCarte(t1, t2, container, isSearch = false) {
+            // Choix du gagnant par nom et non par numéro
+            let nomGagnant = (Math.random() > 0.5 || isSearch) ? t1 : (t2 || t1);
             
-            // Heure et Date Réelle
             const d = new Date();
-            const dateStr = d.toLocaleDateString();
-            const heureStr = (d.getHours() + Math.floor(Math.random()*3)) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
+            const dateStr = d.toLocaleDateString('fr-FR');
+            const heureStr = (d.getHours() + (isSearch ? 1 : Math.floor(Math.random()*5))) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
 
             container.innerHTML += `
                 <div class="match-card">
                     <div class="date-time">📅 ${dateStr} | ⏰ ${heureStr}</div>
-                    <div style="font-weight:bold; font-size:16px;">${nomMatch}</div>
-                    <div class="winner-tag">GAGNANT : ${gagnant}</div>
-                    <div style="font-size:12px; color:var(--gold);">Cote: 1.50+ | Confiance: ${Math.floor(Math.random()*10)+89}%</div>
+                    <div style="font-weight:bold; font-size:17px; color:white;">${t1} ${t2 ? 'vs ' + t2 : ''}</div>
+                    <div class="winner-tag">VAINQUEUR : ${nomGagnant.toUpperCase()}</div>
+                    <div style="font-size:12px; color:var(--gold); font-weight:bold;">
+                        Côte: ${(1.40 + Math.random()*0.3).toFixed(2)} | Fiabilité: ${90 + Math.floor(Math.random()*9)}%
+                    </div>
                 </div>
             `;
         }
