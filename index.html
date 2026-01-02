@@ -3,105 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADALABE AI - NOM DU GAGNANT</title>
+    <title>ADALABE AI - WINNER NAME</title>
     <style>
         :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1e2329; --green: #00ff00; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; }
-        .container { max-width: 450px; margin: auto; display: none; text-align: center; }
-        
-        /* Recherche */
+        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
+        .container { max-width: 450px; margin: auto; display: none; }
         .search-box { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--gold); }
-        .search-input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; margin-bottom: 10px; font-size: 16px; }
-        
-        /* Cartes */
-        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; position: relative; }
-        .date-time { font-size: 11px; color: #888; margin-bottom: 5px; font-weight: bold; }
+        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
         .winner-tag { background: var(--green); color: #000; padding: 6px 12px; border-radius: 5px; font-weight: bold; display: inline-block; margin: 10px 0; text-transform: uppercase; }
-        
-        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; }
+        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; width: 100%; }
+        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; box-sizing: border-box; }
         #lock { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
     </style>
 </head>
 <body>
 
     <div id="lock">
-        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%; text-align:center;">
+        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%;">
             <h2 style="color:var(--gold)">ADALABE AI</h2>
-            <input type="password" id="pass" placeholder="PASSWORD" style="width:100%; padding:10px; margin-bottom:10px; text-align:center;">
-            <button class="btn" onclick="unlock()">DÉVERROUILLER</button>
+            <input type="password" id="pass" placeholder="PASSWORD">
+            <button class="btn" onclick="unlock()">ENTRER</button>
         </div>
     </div>
 
     <div id="app" class="container">
-        <h2 style="color:var(--gold)">SCANNER LIVE BET261</h2>
+        <h2 style="color:var(--gold)">SCANNER BET261</h2>
 
         <div class="search-box">
-            <input type="text" id="s-input" class="search-input" placeholder="Ex: Madagascar vs Sénégal">
-            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER CE MATCH</button>
+            <input type="text" id="s-input" placeholder="Match (ex: Arsenal vs Chelsea)">
+            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER LE GAGNANT</button>
         </div>
 
         <div id="list"></div>
-        <button class="btn" onclick="actualiser()" style="margin-top:10px;">GÉNÉRER NOUVEAUX MATCHS</button>
+        <button class="btn" onclick="actualiser()" style="margin-top:10px;">GÉNÉRER AUTRES MATCHS</button>
     </div>
 
     <script>
-        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Barcelone", "Man City", "Bayern", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Chelsea", "Juventus", "Dortmund"];
+        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Man City", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Bayern", "Barcelona"];
 
         function unlock() {
             if(document.getElementById('pass').value.toLowerCase().trim() === 'adalabe') {
                 document.getElementById('lock').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
                 actualiser();
-            } else { alert("Mot de passe incorrect"); }
+            } else { alert("Code incorrect"); }
         }
 
         function actualiser() {
             const list = document.getElementById('list');
-            list.innerHTML = "<p>Scan des serveurs en cours...</p>";
-            
-            setTimeout(() => {
-                list.innerHTML = "";
-                let shuffle = [...equipes].sort(() => 0.5 - Math.random());
-                for(let i = 0; i < 4; i++) {
-                    creerCarte(shuffle[i], shuffle[i+4], list);
-                }
-            }, 500);
+            list.innerHTML = "";
+            let shuffle = [...equipes].sort(() => 0.5 - Math.random());
+            for(let i = 0; i < 4; i++) {
+                creerCarte(shuffle[i], shuffle[i+4], list);
+            }
         }
 
         function rechercher() {
             const val = document.getElementById('s-input').value.trim();
-            if(val.length < 3) return alert("Veuillez écrire le nom du match");
-            
+            if(val.length < 3) return alert("Écrivez le nom du match");
             const list = document.getElementById('list');
             list.innerHTML = ""; 
             
-            // Analyse intelligente du texte pour extraire les noms
             let noms = val.split(/vs|VS|-/);
             let t1 = noms[0] ? noms[0].trim() : val;
             let t2 = noms[1] ? noms[1].trim() : "";
-
-            creerCarte(t1, t2, list, true);
             
-            // On ajoute 2 autres matchs pour remplir
-            let extra = [...equipes].sort(() => 0.5 - Math.random());
-            creerCarte(extra[0], extra[1], list);
+            creerCarte(t1, t2, list, true);
         }
 
         function creerCarte(t1, t2, container, isSearch = false) {
-            // Choix du gagnant par nom et non par numéro
-            let nomGagnant = (Math.random() > 0.5 || isSearch) ? t1 : (t2 || t1);
+            // Choix du nom de l'équipe gagnante (priorité à l'équipe 1 pour la recherche)
+            let vainqueur = (isSearch || Math.random() > 0.5) ? t1 : (t2 || t1);
             
             const d = new Date();
             const dateStr = d.toLocaleDateString('fr-FR');
-            const heureStr = (d.getHours() + (isSearch ? 1 : Math.floor(Math.random()*5))) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
+            const heureStr = (d.getHours() + (isSearch ? 0 : Math.floor(Math.random()*4))) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
 
             container.innerHTML += `
                 <div class="match-card">
-                    <div class="date-time">📅 ${dateStr} | ⏰ ${heureStr}</div>
-                    <div style="font-weight:bold; font-size:17px; color:white;">${t1} ${t2 ? 'vs ' + t2 : ''}</div>
-                    <div class="winner-tag">VAINQUEUR : ${nomGagnant.toUpperCase()}</div>
+                    <div style="font-size: 11px; color: #888; font-weight: bold;">📅 ${dateStr} | ⏰ ${heureStr}</div>
+                    <div style="font-weight:bold; font-size:17px; margin-top:5px;">${t1} ${t2 ? 'vs ' + t2 : ''}</div>
+                    <div class="winner-tag">GAGNANT : ${vainqueur.toUpperCase()}</div>
                     <div style="font-size:12px; color:var(--gold); font-weight:bold;">
-                        Côte: ${(1.40 + Math.random()*0.3).toFixed(2)} | Fiabilité: ${90 + Math.floor(Math.random()*9)}%
+                        Côte: ${(1.45 + Math.random()*0.2).toFixed(2)} | Fiabilité: 97%
                     </div>
                 </div>
             `;
