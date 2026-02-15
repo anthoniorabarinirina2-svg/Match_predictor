@@ -1,95 +1,259 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADALABE AI - WINNER NAME</title>
-    <style>
-        :root { --gold: #f0b90b; --bg: #0b0e11; --card: #1e2329; --green: #00ff00; }
-        body { background: var(--bg); color: white; font-family: sans-serif; margin: 0; padding: 10px; text-align: center; }
-        .container { max-width: 450px; margin: auto; display: none; }
-        .search-box { background: var(--card); padding: 15px; border-radius: 15px; margin-bottom: 15px; border: 1px solid var(--gold); }
-        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 12px; border-left: 5px solid var(--gold); text-align: left; }
-        .winner-tag { background: var(--green); color: #000; padding: 6px 12px; border-radius: 5px; font-weight: bold; display: inline-block; margin: 10px 0; text-transform: uppercase; }
-        .btn { width: 100%; padding: 15px; background: var(--gold); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; color: #000; font-size: 16px; width: 100%; }
-        input { width: 100%; padding: 12px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; text-align: center; box-sizing: border-box; }
-        #lock { position: fixed; inset: 0; background: var(--bg); z-index: 9999; display: flex; justify-content: center; align-items: center; }
-    </style>
+<meta charset="UTF-8">
+<title>Prédiction Aviator ×5 / ×10 | Top Anthonio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    background: linear-gradient(135deg, #0f172a, #1e1b4b, #000);
+    color:white;
+    padding-top:30px;
+}
+
+.container{
+    width:500px;
+    padding:30px;
+    border-radius:25px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 50px rgba(0,0,0,0.7);
+    text-align:center;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow{
+    0%{box-shadow:0 0 40px rgba(255,77,166,0.4);}
+    50%{box-shadow:0 0 70px rgba(255,77,166,0.7);}
+    100%{box-shadow:0 0 40px rgba(255,77,166,0.4);}
+}
+
+h1{
+    margin-bottom:20px;
+    font-size:22px;
+    letter-spacing:1px;
+    text-shadow:0 0 15px #ff4da6;
+}
+
+input{
+    width:40%;
+    padding:12px;
+    margin:5px 5px;
+    border:none;
+    border-radius:12px;
+    background: rgba(255,255,255,0.08);
+    color:white;
+    font-size:15px;
+    outline:none;
+}
+
+input::placeholder{color: rgba(255,255,255,0.6);}
+
+button{
+    width:95%;
+    padding:14px;
+    margin-top:10px;
+    border:none;
+    border-radius:15px;
+    background: linear-gradient(90deg,#ff4da6,#a855f7);
+    color:white;
+    font-weight:700;
+    cursor:pointer;
+    font-size:16px;
+    box-shadow:0 0 20px rgba(255,77,166,0.6);
+    transition:0.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+    box-shadow:0 0 35px rgba(255,77,166,1);
+}
+
+.prediction-box{
+    margin-top:20px;
+    padding:20px;
+    border-radius:20px;
+    background: rgba(255,77,166,0.2);
+    border: 2px solid #a855f7;
+    text-align:center;
+    font-size:18px;
+    color:#fff;
+    text-shadow:0 0 8px #ff4da6,0 0 15px #a855f7;
+    position: relative;
+}
+
+.prediction-time{
+    margin-top:10px;
+    font-size:16px;
+    color:#38bdf8;
+    text-shadow:0 0 5px #38bdf8,0 0 10px #38bdf8;
+}
+
+.prediction-tags{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:10px;
+}
+
+.tag{
+    padding:5px 12px;
+    border-radius:12px;
+    font-weight:700;
+    font-size:14px;
+}
+
+.x5{background:#22c55e; color:white;}
+.x10{background:#f59e0b; color:white;}
+
+.history{
+    margin-top:20px;
+    text-align:left;
+    max-height:250px;
+    overflow-y:auto;
+    font-size:14px;
+}
+
+.advice{
+    margin-top:15px;
+    font-size:14px;
+    color:#a855f7;
+    text-shadow:0 0 8px #a855f7;
+}
+
+.author{
+    margin-top:20px;
+    font-size:16px;
+    font-weight:700;
+    color:#ff4da6;
+    text-shadow:0 0 8px #ff4da6,0 0 12px #a855f7;
+}
+
+.result-buttons{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+    gap:20px;
+}
+
+.result-buttons button{
+    width:100px;
+    padding:8px;
+    font-size:14px;
+}
+</style>
 </head>
 <body>
 
-    <div id="lock">
-        <div style="background:var(--card); padding:30px; border-radius:20px; border:1px solid var(--gold); width:85%;">
-            <h2 style="color:var(--gold)">ADALABE AI</h2>
-            <input type="password" id="pass" placeholder="PASSWORD">
-            <button class="btn" onclick="unlock()">ENTRER</button>
-        </div>
-    </div>
+<div class="container">
+<h1>🧡 Prédiction Aviator ×5 / ×10</h1>
 
-    <div id="app" class="container">
-        <h2 style="color:var(--gold)">SCANNER BET261</h2>
+<p>Rose 1 :</p>
+<input type="number" id="rose1h" placeholder="HH" min="0" max="23">
+<input type="number" id="rose1m" placeholder="MN" min="0" max="59">
 
-        <div class="search-box">
-            <input type="text" id="s-input" placeholder="Match (ex: Arsenal vs Chelsea)">
-            <button class="btn" style="background:#3498db; color:white;" onclick="rechercher()">ANALYSER LE GAGNANT</button>
-        </div>
+<p>Rose 2 :</p>
+<input type="number" id="rose2h" placeholder="HH" min="0" max="23">
+<input type="number" id="rose2m" placeholder="MN" min="0" max="59">
 
-        <div id="list"></div>
-        <button class="btn" onclick="actualiser()" style="margin-top:10px;">GÉNÉRER AUTRES MATCHS</button>
-    </div>
+<button onclick="calculerPrediction()">Calculer Prédiction</button>
 
-    <script>
-        const equipes = ["Arsenal", "Liverpool", "Real Madrid", "Man City", "PSG", "Sénégal", "Madagascar", "Egypte", "Maroc", "Bayern", "Barcelona"];
+<div id="predictions-container"></div>
 
-        function unlock() {
-            if(document.getElementById('pass').value.toLowerCase().trim() === 'adalabe') {
-                document.getElementById('lock').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
-                actualiser();
-            } else { alert("Code incorrect"); }
-        }
+<div class="history" id="history">
+<strong>Historique (3 dernières prédictions) :</strong><br>
+</div>
 
-        function actualiser() {
-            const list = document.getElementById('list');
-            list.innerHTML = "";
-            let shuffle = [...equipes].sort(() => 0.5 - Math.random());
-            for(let i = 0; i < 4; i++) {
-                creerCarte(shuffle[i], shuffle[i+4], list);
-            }
-        }
+<div class="advice">
+💡 Conseil : choisir 2 roses un peu éloignées pour un intervalle plus fiable.
+</div>
 
-        function rechercher() {
-            const val = document.getElementById('s-input').value.trim();
-            if(val.length < 3) return alert("Écrivez le nom du match");
-            const list = document.getElementById('list');
-            list.innerHTML = ""; 
-            
-            let noms = val.split(/vs|VS|-/);
-            let t1 = noms[0] ? noms[0].trim() : val;
-            let t2 = noms[1] ? noms[1].trim() : "";
-            
-            creerCarte(t1, t2, list, true);
-        }
+<div class="author">Top Anthonio Rabarinirina 🔥❤️</div>
 
-        function creerCarte(t1, t2, container, isSearch = false) {
-            // Choix du nom de l'équipe gagnante (priorité à l'équipe 1 pour la recherche)
-            let vainqueur = (isSearch || Math.random() > 0.5) ? t1 : (t2 || t1);
-            
-            const d = new Date();
-            const dateStr = d.toLocaleDateString('fr-FR');
-            const heureStr = (d.getHours() + (isSearch ? 0 : Math.floor(Math.random()*4))) + ":" + (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes());
+<div style="margin-top:15px;">
+<strong>Total Gagné :</strong> <span id="total-win">0</span> |
+<strong>Total Perdu :</strong> <span id="total-lose">0</span>
+</div>
 
-            container.innerHTML += `
-                <div class="match-card">
-                    <div style="font-size: 11px; color: #888; font-weight: bold;">📅 ${dateStr} | ⏰ ${heureStr}</div>
-                    <div style="font-weight:bold; font-size:17px; margin-top:5px;">${t1} ${t2 ? 'vs ' + t2 : ''}</div>
-                    <div class="winner-tag">GAGNANT : ${vainqueur.toUpperCase()}</div>
-                    <div style="font-size:12px; color:var(--gold); font-weight:bold;">
-                        Côte: ${(1.45 + Math.random()*0.2).toFixed(2)} | Fiabilité: 97%
-                    </div>
-                </div>
-            `;
-        }
-    </script>
+</div>
+
+<script>
+let historique = [];
+let totalWin = 0;
+let totalLose = 0;
+
+function calculerPrediction(){
+    let h1=parseInt(document.getElementById("rose1h").value);
+    let m1=parseInt(document.getElementById("rose1m").value);
+    let h2=parseInt(document.getElementById("rose2h").value);
+    let m2=parseInt(document.getElementById("rose2m").value);
+
+    if(isNaN(h1) || isNaN(m1) || isNaN(h2) || isNaN(m2)){
+        alert("Veuillez remplir toutes les cases correctement!");
+        return;
+    }
+
+    // Calcul de l'intervalle (caché)
+    let intervalle = (m2 - m1) + 1;
+    if(intervalle <= 0) intervalle += 60;
+
+    // Rose prédite
+    let nextM = m2 + intervalle;
+    let nextH = h2;
+    if(nextM >= 60){
+        nextH += Math.floor(nextM/60);
+        nextM = nextM % 60;
+    }
+    nextH = nextH % 24;
+    let prediction = `${nextH.toString().padStart(2,"0")}:${nextM.toString().padStart(2,"0")}`;
+
+    // Créer un cadre de prédiction
+    let predDiv = document.createElement("div");
+    predDiv.classList.add("prediction-box");
+    predDiv.innerHTML = `<div class="prediction-time">${prediction}</div>
+                         <div class="prediction-tags">
+                         <span class="tag x5">×5 Assuré 100%</span>
+                         <span class="tag x10">×10 Risqué</span>
+                         </div>
+                         <div class="result-buttons">
+                         <button onclick="marquerGagner(this)">Gagner</button>
+                         <button onclick="marquerPerdu(this)">Perdre</button>
+                         </div>`;
+
+    // Ajouter au début pour garder les 3 dernières
+    let container = document.getElementById("predictions-container");
+    container.prepend(predDiv);
+    if(container.children.length > 3){
+        container.removeChild(container.lastChild);
+    }
+
+    // Ajouter dans l'historique
+    historique.unshift(`Rose1: ${h1.toString().padStart(2,"0")}:${m1.toString().padStart(2,"0")} | Rose2: ${h2.toString().padStart(2,"0")}:${m2.toString().padStart(2,"0")} → Rose prédite: ${prediction}`);
+    if(historique.length > 3) historique.pop();
+    document.getElementById("history").innerHTML="<strong>Historique (3 dernières prédictions) :</strong><br>"+historique.join("<br>");
+}
+
+function marquerGagner(btn){
+    totalWin++;
+    document.getElementById("total-win").innerText = totalWin;
+    btn.disabled = true;
+    btn.nextElementSibling.disabled = true;
+}
+
+function marquerPerdu(btn){
+    totalLose++;
+    document.getElementById("total-lose").innerText = totalLose;
+    btn.disabled = true;
+    btn.previousElementSibling.disabled = true;
+}
+</script>
+
 </body>
-</html>
+    </html>
