@@ -1,259 +1,256 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>Prédiction Aviator ×5 / ×10 | Top Anthonio</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviation VIP - V18</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: sans-serif; background: #000; color: #fff; min-height: 100vh; }
 
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+        /* --- SÉCURITÉ --- */
+        #auth-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+        }
 
-body{
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    background: linear-gradient(135deg, #0f172a, #1e1b4b, #000);
-    color:white;
-    padding-top:30px;
-}
+        .plane-anim {
+            width: 70px; fill: #ff0000; filter: drop-shadow(0 0 10px red);
+            animation: fly 3s infinite ease-in-out; margin-bottom: 20px;
+        }
+        @keyframes fly { 0%, 100% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-15px) rotate(-5deg); } }
 
-.container{
-    width:500px;
-    padding:30px;
-    border-radius:25px;
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 50px rgba(0,0,0,0.7);
-    text-align:center;
-    animation: glow 2s infinite alternate;
-}
+        input {
+            width: 100%; max-width: 300px; padding: 15px; background: #111;
+            border: 1px solid #ff0000; color: #00ff00; border-radius: 10px;
+            text-align: center; font-size: 1rem; margin-bottom: 15px; outline: none;
+        }
 
-@keyframes glow{
-    0%{box-shadow:0 0 40px rgba(255,77,166,0.4);}
-    50%{box-shadow:0 0 70px rgba(255,77,166,0.7);}
-    100%{box-shadow:0 0 40px rgba(255,77,166,0.4);}
-}
+        .btn-red {
+            width: 100%; max-width: 300px; padding: 15px; background: #ff0000;
+            color: #fff; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;
+        }
 
-h1{
-    margin-bottom:20px;
-    font-size:22px;
-    letter-spacing:1px;
-    text-shadow:0 0 15px #ff4da6;
-}
+        /* --- INTERFACE --- */
+        .container { padding: 10px; max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; min-height: 100vh; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; background: #111; padding: 5px; border-radius: 10px; }
+        .tab { flex: 1; padding: 10px; text-align: center; border-radius: 8px; font-size: 10px; cursor: pointer; color: #666; }
+        .tab.active { background: #ff0000; color: #fff; font-weight: bold; }
 
-input{
-    width:40%;
-    padding:12px;
-    margin:5px 5px;
-    border:none;
-    border-radius:12px;
-    background: rgba(255,255,255,0.08);
-    color:white;
-    font-size:15px;
-    outline:none;
-}
+        .panel { display: none; background: #0a0a0a; padding: 15px; border-radius: 15px; border: 1px solid #222; flex-grow: 1; }
+        .panel.active { display: block; }
 
-input::placeholder{color: rgba(255,255,255,0.6);}
+        .member-item { 
+            background: #111; padding: 10px; border-radius: 8px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center; border-left: 3px solid #ff0000;
+        }
+        .btn-expulser { background: #330000; color: #ff4d4d; border: 1px solid #ff4d4d; padding: 5px 10px; border-radius: 5px; font-size: 10px; }
 
-button{
-    width:95%;
-    padding:14px;
-    margin-top:10px;
-    border:none;
-    border-radius:15px;
-    background: linear-gradient(90deg,#ff4da6,#a855f7);
-    color:white;
-    font-weight:700;
-    cursor:pointer;
-    font-size:16px;
-    box-shadow:0 0 20px rgba(255,77,166,0.6);
-    transition:0.3s;
-}
+        .dot { width: 40px; height: 40px; background: #000; border: 2px solid #ff0000; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .res-box { padding: 12px; border-radius: 10px; text-align: center; border-left: 4px solid; background: #050505; }
+        .rose { border-color: #ff0055; } .blue { border-color: #0088ff; }
+        .time { display: block; font-size: 1rem; color: #00ff00; font-weight: bold; }
 
-button:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 35px rgba(255,77,166,1);
-}
-
-.prediction-box{
-    margin-top:20px;
-    padding:20px;
-    border-radius:20px;
-    background: rgba(255,77,166,0.2);
-    border: 2px solid #a855f7;
-    text-align:center;
-    font-size:18px;
-    color:#fff;
-    text-shadow:0 0 8px #ff4da6,0 0 15px #a855f7;
-    position: relative;
-}
-
-.prediction-time{
-    margin-top:10px;
-    font-size:16px;
-    color:#38bdf8;
-    text-shadow:0 0 5px #38bdf8,0 0 10px #38bdf8;
-}
-
-.prediction-tags{
-    display:flex;
-    justify-content:center;
-    gap:15px;
-    margin-top:10px;
-}
-
-.tag{
-    padding:5px 12px;
-    border-radius:12px;
-    font-weight:700;
-    font-size:14px;
-}
-
-.x5{background:#22c55e; color:white;}
-.x10{background:#f59e0b; color:white;}
-
-.history{
-    margin-top:20px;
-    text-align:left;
-    max-height:250px;
-    overflow-y:auto;
-    font-size:14px;
-}
-
-.advice{
-    margin-top:15px;
-    font-size:14px;
-    color:#a855f7;
-    text-shadow:0 0 8px #a855f7;
-}
-
-.author{
-    margin-top:20px;
-    font-size:16px;
-    font-weight:700;
-    color:#ff4da6;
-    text-shadow:0 0 8px #ff4da6,0 0 12px #a855f7;
-}
-
-.result-buttons{
-    margin-top:10px;
-    display:flex;
-    justify-content:center;
-    gap:20px;
-}
-
-.result-buttons button{
-    width:100px;
-    padding:8px;
-    font-size:14px;
-}
-</style>
+        .logout-btn { 
+            display: block; width: 100%; margin: 20px auto; padding: 15px; 
+            background: #111; color: #555; border: 1px solid #333; 
+            border-radius: 10px; font-size: 12px; cursor: pointer;
+        }
+        .logout-btn:active { background: #222; color: #fff; }
+    </style>
 </head>
 <body>
 
-<div class="container">
-<h1>🧡 Prédiction Aviator ×5 / ×10</h1>
+    <div id="auth-screen">
+        <svg class="plane-anim" viewBox="0 0 24 24"><path d="M21,16L21,14L13,9L13,3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5L10,9L2,14L2,16L10,13.5L10,19L8,20.5L8,22L11.5,21L15,22L15,20.5L13,19L13,13.5L21,16Z"/></svg>
+        <h3 style="letter-spacing:2px; margin-bottom:20px;">CONNEXION</h3>
+        <input type="text" id="code-in" placeholder="CODE À 4 CHIFFRES">
+        <button class="btn-red" id="login-trigger">VÉRIFIER</button>
+        <p id="err" style="color:red; font-size:11px; margin-top:10px; display:none;"></p>
+    </div>
 
-<p>Rose 1 :</p>
-<input type="number" id="rose1h" placeholder="HH" min="0" max="23">
-<input type="number" id="rose1m" placeholder="MN" min="0" max="59">
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="tab('col', this)">COULEURS</div>
+            <div class="tab" onclick="tab('ct', this)">COTES</div>
+            <div id="tab-admin-gen" class="tab" onclick="tab('ad', this)" style="display:none; color: #ff0000;">GÉNÉRER</div>
+            <div id="tab-admin-mem" class="tab" onclick="tab('mem', this)" style="display:none; color: #ff0000;">MEMBRES</div>
+        </div>
 
-<p>Rose 2 :</p>
-<input type="number" id="rose2h" placeholder="HH" min="0" max="23">
-<input type="number" id="rose2m" placeholder="MN" min="0" max="59">
+        <div id="p-col" class="panel active">
+            <div style="display:flex; gap:8px; margin-bottom:15px;">
+                <button class="btn-red" style="background:#222; flex:1;" onclick="add('💙')">💙</button>
+                <button class="btn-red" style="background:#222; flex:1;" onclick="add('💜')">💜</button>
+                <button class="btn-red" style="background:#222; flex:1;" onclick="add('🌹')">🌹</button>
+            </div>
+            <div style="display:flex; gap:5px; justify-content:center; margin-bottom:15px;" id="v-seq">
+                <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            </div>
+            <input type="time" id="t-col" step="1" onchange="calcCol()">
+            <div id="r-col" class="res-grid"></div>
+        </div>
 
-<button onclick="calculerPrediction()">Calculer Prédiction</button>
+        <div id="p-ct" class="panel">
+            <input type="number" id="v-ct" placeholder="DERNIÈRE COTE" step="0.01">
+            <input type="time" id="t-ct" step="1" onchange="calcCt()">
+            <div id="r-ct" class="res-grid"></div>
+        </div>
 
-<div id="predictions-container"></div>
+        <div id="p-ad" class="panel">
+            <div style="text-align:center;">
+                <p style="font-size:10px; color:#666;">NOUVEAU CODE MEMBRE</p>
+                <div id="new-code-display" style="font-size:2.5rem; color:red; margin:20px 0; font-weight:bold;">----</div>
+                <button class="btn-red" onclick="generateCode()">GÉNÉRER 4 CHIFFRES</button>
+            </div>
+        </div>
 
-<div class="history" id="history">
-<strong>Historique (3 dernières prédictions) :</strong><br>
-</div>
+        <div id="p-mem" class="panel">
+            <div id="member-list"></div>
+        </div>
 
-<div class="advice">
-💡 Conseil : choisir 2 roses un peu éloignées pour un intervalle plus fiable.
-</div>
-
-<div class="author">Top Anthonio Rabarinirina 🔥❤️</div>
-
-<div style="margin-top:15px;">
-<strong>Total Gagné :</strong> <span id="total-win">0</span> |
-<strong>Total Perdu :</strong> <span id="total-lose">0</span>
-</div>
-
-</div>
+        <button class="logout-btn" id="logout-trigger">DÉCONNECTER L'APPAREIL</button>
+    </div>
 
 <script>
-let historique = [];
-let totalWin = 0;
-let totalLose = 0;
+    const getDeviceId = () => navigator.userAgent + screen.width + screen.height;
+    let db = JSON.parse(localStorage.getItem("aviator_db")) || {};
 
-function calculerPrediction(){
-    let h1=parseInt(document.getElementById("rose1h").value);
-    let m1=parseInt(document.getElementById("rose1m").value);
-    let h2=parseInt(document.getElementById("rose2h").value);
-    let m2=parseInt(document.getElementById("rose2m").value);
+    // GESTIONNAIRES D'ÉVÉNEMENTS ROBUSTES
+    document.getElementById('login-trigger').addEventListener('click', login);
+    document.getElementById('logout-trigger').addEventListener('click', logout);
 
-    if(isNaN(h1) || isNaN(m1) || isNaN(h2) || isNaN(m2)){
-        alert("Veuillez remplir toutes les cases correctement!");
-        return;
+    function login() {
+        const input = document.getElementById("code-in").value.trim();
+        const err = document.getElementById("err");
+        const device = getDeviceId();
+
+        if (input === "091110") {
+            document.querySelectorAll('[id^="tab-admin"]').forEach(el => el.style.display = "block");
+            document.getElementById("auth-screen").style.display = "none";
+            localStorage.setItem("admin_active", "true");
+            updateMemberList();
+            return;
+        }
+
+        if (db.hasOwnProperty(input)) {
+            if (db[input] === null || db[input] === device) {
+                db[input] = device;
+                localStorage.setItem("aviator_db", JSON.stringify(db));
+                localStorage.setItem("my_active_session", input);
+                document.getElementById("auth-screen").style.display = "none";
+            } else {
+                err.style.display = "block";
+                err.innerText = "CE CODE EST DÉJÀ LIÉ À UN AUTRE TÉLÉPHONE.";
+            }
+        } else {
+            err.style.display = "block";
+            err.innerText = "CODE INVALIDE.";
+        }
     }
 
-    // Calcul de l'intervalle (caché)
-    let intervalle = (m2 - m1) + 1;
-    if(intervalle <= 0) intervalle += 60;
-
-    // Rose prédite
-    let nextM = m2 + intervalle;
-    let nextH = h2;
-    if(nextM >= 60){
-        nextH += Math.floor(nextM/60);
-        nextM = nextM % 60;
-    }
-    nextH = nextH % 24;
-    let prediction = `${nextH.toString().padStart(2,"0")}:${nextM.toString().padStart(2,"0")}`;
-
-    // Créer un cadre de prédiction
-    let predDiv = document.createElement("div");
-    predDiv.classList.add("prediction-box");
-    predDiv.innerHTML = `<div class="prediction-time">${prediction}</div>
-                         <div class="prediction-tags">
-                         <span class="tag x5">×5 Assuré 100%</span>
-                         <span class="tag x10">×10 Risqué</span>
-                         </div>
-                         <div class="result-buttons">
-                         <button onclick="marquerGagner(this)">Gagner</button>
-                         <button onclick="marquerPerdu(this)">Perdre</button>
-                         </div>`;
-
-    // Ajouter au début pour garder les 3 dernières
-    let container = document.getElementById("predictions-container");
-    container.prepend(predDiv);
-    if(container.children.length > 3){
-        container.removeChild(container.lastChild);
+    function logout() {
+        localStorage.removeItem("my_active_session");
+        localStorage.removeItem("admin_active");
+        location.href = location.href; // Refresh forcé compatible tout mobile
     }
 
-    // Ajouter dans l'historique
-    historique.unshift(`Rose1: ${h1.toString().padStart(2,"0")}:${m1.toString().padStart(2,"0")} | Rose2: ${h2.toString().padStart(2,"0")}:${m2.toString().padStart(2,"0")} → Rose prédite: ${prediction}`);
-    if(historique.length > 3) historique.pop();
-    document.getElementById("history").innerHTML="<strong>Historique (3 dernières prédictions) :</strong><br>"+historique.join("<br>");
-}
+    window.onload = () => {
+        const session = localStorage.getItem("my_active_session");
+        const isAdmin = localStorage.getItem("admin_active");
+        
+        if (isAdmin === "true") {
+            document.querySelectorAll('[id^="tab-admin"]').forEach(el => el.style.display = "block");
+            document.getElementById("auth-screen").style.display = "none";
+        } else if (session && db[session] === getDeviceId()) {
+            document.getElementById("auth-screen").style.display = "none";
+        }
+    };
 
-function marquerGagner(btn){
-    totalWin++;
-    document.getElementById("total-win").innerText = totalWin;
-    btn.disabled = true;
-    btn.nextElementSibling.disabled = true;
-}
+    function generateCode() {
+        const code = Math.floor(1000 + Math.random() * 9000).toString();
+        db[code] = null;
+        localStorage.setItem("aviator_db", JSON.stringify(db));
+        document.getElementById("new-code-display").innerText = code;
+        updateMemberList();
+    }
 
-function marquerPerdu(btn){
-    totalLose++;
-    document.getElementById("total-lose").innerText = totalLose;
-    btn.disabled = true;
-    btn.previousElementSibling.disabled = true;
-}
+    function updateMemberList() {
+        const listDiv = document.getElementById("member-list");
+        listDiv.innerHTML = "";
+        for (let code in db) {
+            listDiv.innerHTML += `
+                <div class="member-item">
+                    <div style="font-size:13px;"><b>Code: ${code}</b><br><small style="color:${db[code]?'#0f0':'#555'}">${db[code]?'Actif':'Libre'}</small></div>
+                    <button class="btn-expulser" onclick="expulser('${code}')">SUPPRIMER</button>
+                </div>`;
+        }
+    }
+
+    function expulser(code) {
+        if(confirm("Supprimer ce code ?")) {
+            delete db[code];
+            localStorage.setItem("aviator_db", JSON.stringify(db));
+            updateMemberList();
+        }
+    }
+
+    // --- LOGIQUE STRATÉGIE ---
+    let seq = [];
+    const patterns = {
+        "💙💙🌹💙💙": [{m:3, c:"x30/x400", s:"rose"}, {m:5, c:"x20/x100", s:"blue"}, {m:9, c:"x50 AUTO", s:"rose"}, {m:11, c:"x25", s:"blue"}],
+        "💜💜🌹💜💙": [{m:5, c:"x50/x15", s:"rose"}, {m:7, c:"x40", s:"blue"}, {m:9, c:"x10 AUTO", s:"rose"}, {m:12, c:"x10", s:"blue"}, {m:19, c:"x300", s:"rose"}],
+        "💜💙🌹💜💙": [{m:7, c:"x50/x20", s:"rose"}, {m:4, c:"x10", s:"blue"}, {m:2, c:"x100/x10", s:"rose"}],
+        "💙💙🌹💙💜": [{m:3, c:"x80/x25", s:"rose"}, {m:7, c:"x10/x70", s:"blue"}, {m:15, c:"x3000", s:"rose"}],
+        "💜💜🌹💙💙": [{m:5, c:"x300/x20", s:"rose"}, {m:2, c:"x30/x80", s:"blue"}, {m:7, c:"x10", s:"blue"}],
+        "💙💜🌹💜💙": [{m:3, c:"x50", s:"blue"}, {m:7, c:"x150/x25", s:"rose"}],
+        "💜💙🌹💙💙": [{m:3, c:"x40/x70", s:"blue"}, {m:5, c:"x50/x200", s:"rose"}]
+    };
+
+    function tab(id, el) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('p-'+id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    function add(e) {
+        if(seq.length >= 5) seq = [];
+        seq.push(e);
+        document.querySelectorAll('.dot').forEach((d, i) => d.innerText = seq[i] || '');
+        if(seq.length === 5) calcCol();
+    }
+
+    function calcCol() {
+        const t = document.getElementById("t-col").value;
+        const res = document.getElementById("r-col");
+        if(!t || seq.length < 5) return;
+        const found = patterns[seq.join('')];
+        if(!found) { res.innerHTML = "<p style='grid-column:span 2; color:#333; text-align:center;'>---</p>"; return; }
+        draw(t, found, res);
+    }
+
+    function calcCt() {
+        const v = parseFloat(document.getElementById("v-ct").value);
+        const t = document.getElementById("t-ct").value;
+        const res = document.getElementById("r-ct");
+        if(!v || !t) return;
+        let l = [];
+        if(v >= 2.5 && v <= 3.5) l.push({m:2.166, c:"X3", s:"blue"});
+        else if(v >= 4.5 && v <= 6.5) l.push({m:4.166, c:"X5", s:"blue"});
+        else if(v >= 6.5) l.push({m:6.166, c:"X10", s:"rose"});
+        draw(t, l, res);
+    }
+
+    function draw(t, list, div) {
+        const [h, m, s] = t.split(':').map(Number);
+        div.innerHTML = list.map(i => {
+            let d = new Date();
+            d.setHours(h, m, s + (i.m * 60));
+            return `<div class="res-box ${i.s}"><small style="font-size:9px; color:gold;">${i.c}</small><span class="time">${d.toLocaleTimeString('fr-FR')}</span></div>`;
+        }).join('');
+    }
 </script>
-
 </body>
-    </html>
+</html>
